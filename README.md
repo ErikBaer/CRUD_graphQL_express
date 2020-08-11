@@ -1,6 +1,6 @@
 # CRUD-API
 
-Organize all the books from your favorite Authors with this CRUD-API written in GraphQL and Express.
+Organize all books from your favorite authors with this nested CRUD-API written in GraphQL and Express.
 
 Create, Read, Update and Delete Books and Authors and make this Database your own.
 
@@ -15,6 +15,40 @@ npm run devStart
 
 
 You can access the API via graphiql on localhost:5000/graphql.
+
+## Queries
+
+Query all authors or books and find your favorite one by id.
+
+The RootQuery resolves to:
+
+author: {
+    id,
+    name,
+    books
+}
+and 
+
+book: {
+    id,
+    name,
+    author,
+    authorId
+}
+
+Use the id to perform update or delete operations on objects.
+To add an object, please provide:
+
+author: {
+    name
+}
+
+or
+
+books: {
+    name,
+    author
+}
 
 Happy query! :)
 

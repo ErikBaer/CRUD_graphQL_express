@@ -15,7 +15,7 @@ const {authors, books} = require ('./database')
 
 const BookType = new GraphQLObjectType({
     name: 'Book',
-    description: 'This represents a Book written by an author',
+    description: 'This represents a Book written by an Author',
     fields: () => ({
         id: {type: GraphQLNonNull(GraphQLInt) },
         name: {type: GraphQLNonNull (GraphQLString) },
