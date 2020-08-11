@@ -4,13 +4,41 @@ const {
     GraphQLSchema,
     GraphQLObjectType,
     GraphQLString,
-    GraphQLList
+    GraphQLList,
+    GraphQLInt,
+    GraphQLNonNull
 } = require('graphql')
+
+const app = express();
 
 const {authors, books} = require ('./database')
 
+const BookType = new GraphQLObjectType({
+    name: 'Book',
+    description: 'This represents a Book written by an author',
+    fields: () => ({
+        id: {type: GraphQLNonNull(GraphQLInt) },
+        name: {type: GraphQLNonNull (GraphQLString) },
+        authorId: {type: GraphQLNonNull(GraphQLInt) },
+        author: {
+            type: AuthorType,
+            resolve: (book) => {
+                return authors.find(author => author.id === book.authorId)
+            }
+        }
+    })
+})
 
-const app = express();
+const AuthorType = new GraphQLObjectType({
+    name: 'Author',
+    description: 'Author of a book',
+    fields: () => ({
+        id: {type: GraphQLNonNull(GraphQLInt) },
+        name: {type: GraphQLNonNull (GraphQLString) }
+       
+    })
+})
+
 
 const RootQueryType = new GraphQLObjectType ({
     name: 'Query',
@@ -24,10 +52,15 @@ const RootQueryType = new GraphQLObjectType ({
     })
 })
 
+
+const schema = new GraphQLSchema({
+    query: RootQueryType
+})
+
 app.use(
   '/graphql',
   graphqlHTTP({
-      RootQueryType,
+      schema,
     graphiql: true,
   }),
 );
