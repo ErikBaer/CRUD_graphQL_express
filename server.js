@@ -1,4 +1,5 @@
 const express = require('express');
+const uuid = require('uuid')
 const { graphqlHTTP } = require('express-graphql');
 const {
     GraphQLSchema,
@@ -93,7 +94,7 @@ const RootMutationType = new GraphQLObjectType({
               authorId: { type: GraphQLNonNull(GraphQLInt) }
             },
             resolve: (parent, args) => { //this is where you do Database operations
-              const book = { id: books.length + 1, name: args.name, authorId: args.authorId }
+              const book = { id: (books.length+args.name.length), name: args.name, authorId: args.authorId }
               books.push(book)
               return book
             }
@@ -137,7 +138,7 @@ const RootMutationType = new GraphQLObjectType({
               name: { type: GraphQLNonNull(GraphQLString) }
             },
             resolve: (parent, args) => { //this is where you do Database operations
-              const author = { id: authors.length + 1, name: args.name }
+              const author = { id: (authors.length*2+args.name.length*3), name: args.name }
               authors.push(author)
               return author
             }
