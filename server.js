@@ -135,15 +135,12 @@ const RootMutationType = new GraphQLObjectType({
             description: 'Update a Author',
             args: {
                 id: {type: GraphQLInt},
-              name: { type: GraphQLNonNull(GraphQLString) },
-              authorId: { type: GraphQLNonNull(GraphQLInt) }
+              name: { type: GraphQLNonNull(GraphQLString) }
             },
             resolve: (parent, args) => { //this is where you do Database operations
               authorIndex = authors.findIndex((author => author.id ==args.id))
-              console.log ('Before update: ', authors[authorIndex])
             
               authors[authorIndex].name = args.name
-              authors[authorIndex].authorId = args.authorId
 
               console.log('After update: ', authors[authorIndex])
 
