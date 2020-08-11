@@ -1,5 +1,4 @@
 const express = require('express');
-const uuid = require('uuid')
 const { graphqlHTTP } = require('express-graphql');
 const {
     GraphQLSchema,
@@ -125,7 +124,7 @@ const RootMutationType = new GraphQLObjectType({
             args: {
                 id: {type: GraphQLInt}
             },
-            resolve: (parent, args) => {
+            resolve: (parent, args) => {//this is where you do Database operations
               bookIndex = books.findIndex((book => book.id ==args.id))
               books.splice(bookIndex, 1)
             }
@@ -166,7 +165,7 @@ const RootMutationType = new GraphQLObjectType({
               args: {
                   id: {type: GraphQLInt}
               },
-              resolve: (parent, args) => {
+              resolve: (parent, args) => {//this is where you do Database operations
                 authorIndex = authors.findIndex((author => author.id ==args.id))
                 authors.splice(authorIndex, 1)
               }
