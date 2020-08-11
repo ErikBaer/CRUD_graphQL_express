@@ -132,7 +132,7 @@ const RootMutationType = new GraphQLObjectType({
           },
           updateAuthor: {
             type: AuthorType,
-            description: 'Update a Author',
+            description: 'Update an Author',
             args: {
                 id: {type: GraphQLInt},
               name: { type: GraphQLNonNull(GraphQLString) }
@@ -146,6 +146,18 @@ const RootMutationType = new GraphQLObjectType({
 
               return authors[authorIndex]
             }
+          },
+          deleteAuthor: {
+              type: AuthorType,
+              description: 'Delete an Author by ID',
+              args: {
+                  id: {type: GraphQLInt}
+              },
+              resolve: (parent, args) => {
+                authorIndex = authors.findIndex((author => author.id ==args.id))
+                authors.splice(authorIndex, 1)
+              }
+        
           }
     })
 })
