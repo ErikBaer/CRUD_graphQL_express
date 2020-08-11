@@ -98,6 +98,26 @@ const RootMutationType = new GraphQLObjectType({
               return book
             }
           },
+          updateBook: {
+            type: BookType,
+            description: 'Update a book',
+            args: {
+                id: {type: GraphQLInt},
+              name: { type: GraphQLNonNull(GraphQLString) },
+              authorId: { type: GraphQLNonNull(GraphQLInt) }
+            },
+            resolve: (parent, args) => { //this is where you do Database operations
+              bookIndex = books.findIndex((book => book.id ==args.id))
+              console.log ('Before update: ', books[bookIndex])
+            
+              books[bookIndex].name = args.name
+              books[bookIndex].authorId = args.authorId
+
+              console.log('After update: ', books[bookIndex])
+
+              return books[bookIndex]
+            }
+          },
           addAuthor: {
             type: AuthorType,
             description: 'Add an Author',
@@ -108,6 +128,26 @@ const RootMutationType = new GraphQLObjectType({
               const author = { id: authors.length + 1, name: args.name }
               authors.push(author)
               return author
+            }
+          },
+          updateAuthor: {
+            type: AuthorType,
+            description: 'Update a Author',
+            args: {
+                id: {type: GraphQLInt},
+              name: { type: GraphQLNonNull(GraphQLString) },
+              authorId: { type: GraphQLNonNull(GraphQLInt) }
+            },
+            resolve: (parent, args) => { //this is where you do Database operations
+              authorIndex = authors.findIndex((author => author.id ==args.id))
+              console.log ('Before update: ', authors[authorIndex])
+            
+              authors[authorIndex].name = args.name
+              authors[authorIndex].authorId = args.authorId
+
+              console.log('After update: ', authors[authorIndex])
+
+              return authors[authorIndex]
             }
           }
     })
