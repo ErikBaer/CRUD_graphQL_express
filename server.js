@@ -1,4 +1,5 @@
 const express = require('express');
+const uuid = require('uuid')
 const { graphqlHTTP } = require('express-graphql');
 const {
     GraphQLSchema,
@@ -93,11 +94,43 @@ const RootMutationType = new GraphQLObjectType({
               authorId: { type: GraphQLNonNull(GraphQLInt) }
             },
             resolve: (parent, args) => { //this is where you do Database operations
-              const book = { id: books.length + 1, name: args.name, authorId: args.authorId }
+              const book = { id: (books.length+args.name.length), name: args.name, authorId: args.authorId }
               books.push(book)
               return book
             }
           },
+          updateBook: {
+            type: BookType,
+            description: 'Update a book',
+            args: {
+                id: {type: GraphQLInt},
+              name: { type: GraphQLNonNull(GraphQLString) },
+              authorId: { type: GraphQLNonNull(GraphQLInt) }
+            },
+            resolve: (parent, args) => { //this is where you do Database operations
+              bookIndex = books.findIndex((book => book.id ==args.id))
+              console.log ('Before update: ', books[bookIndex])
+            
+              books[bookIndex].name = args.name
+              books[bookIndex].authorId = args.authorId
+
+              console.log('After update: ', books[bookIndex])
+
+              return books[bookIndex]
+            }
+          },
+          deleteBook: {
+            type: BookType,
+            description: 'Delete an Book by ID',
+            args: {
+                id: {type: GraphQLInt}
+            },
+            resolve: (parent, args) => {
+              bookIndex = books.findIndex((book => book.id ==args.id))
+              books.splice(bookIndex, 1)
+            }
+      
+        },
           addAuthor: {
             type: AuthorType,
             description: 'Add an Author',
@@ -105,10 +138,39 @@ const RootMutationType = new GraphQLObjectType({
               name: { type: GraphQLNonNull(GraphQLString) }
             },
             resolve: (parent, args) => { //this is where you do Database operations
-              const author = { id: authors.length + 1, name: args.name }
+              const author = { id: (authors.length*2+args.name.length*3), name: args.name }
               authors.push(author)
               return author
             }
+          },
+          updateAuthor: {
+            type: AuthorType,
+            description: 'Update an Author',
+            args: {
+                id: {type: GraphQLInt},
+              name: { type: GraphQLNonNull(GraphQLString) }
+            },
+            resolve: (parent, args) => { //this is where you do Database operations
+              authorIndex = authors.findIndex((author => author.id ==args.id))
+            
+              authors[authorIndex].name = args.name
+
+              console.log('After update: ', authors[authorIndex])
+
+              return authors[authorIndex]
+            }
+          },
+          deleteAuthor: {
+              type: AuthorType,
+              description: 'Delete an Author by ID',
+              args: {
+                  id: {type: GraphQLInt}
+              },
+              resolve: (parent, args) => {
+                authorIndex = authors.findIndex((author => author.id ==args.id))
+                authors.splice(authorIndex, 1)
+              }
+        
           }
     })
 })
